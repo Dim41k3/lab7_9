@@ -3,7 +3,7 @@ import json
 class ConfigReader():
     def get_config(self):
         try:
-            with open(r'E:\Coding\u4sem\lab7-9\labasevennine\labasevennine\db_settings.json') as f:
+            with open(r'E:\Coding\u4sem\lab7_9\labsevennine\labsevennine\db_settings.json') as f:
                 settings = json.load(f)
             db_settings = {
                     'ENGINE': 'django.db.backends.postgresql',

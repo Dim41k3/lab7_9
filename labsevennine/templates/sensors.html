@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+
+    <title>TechDevShop</title>
+    <meta charset="utf-8">
+    <link href='https://fonts.googleapis.com/css?family=Aclonica' rel='stylesheet'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Aclonica", sans-serif;
+            margin: 0;
+            background-color: #333;
+
+        }
+
+        .topnav {
+            overflow: hidden;
+            font-family: "Aclonica", sans-serif;
+            background-color: #1b1b1b;
+            display: flex;
+        }
+
+        .topnav a {
+            color: #f2f2f2;
+            font-size: 18px;
+            padding: 14px 16px;
+            font-family: "Aclonica", sans-serif;
+            text-decoration: none;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        #name {
+            color: #f2f2f2;
+            font-family: "Aclonica", sans-serif;
+            font-size: 18px;
+            padding: 14px 16px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .column {
+            position: relative;
+            width: 17%;
+            margin: 5px;
+            padding: 10px;
+            height: 250px;
+            display: inline;
+
+            justify-content: center;
+
+        }
+
+        .column img {
+            width: 100%;
+            height: 250px;
+            border: 3px solid #1b1b1b;
+            border-radius: 5px;
+        }
+
+        .price {
+            position: absolute;
+            bottom: -15px;
+            /* Add this to position the price element at the bottom */
+            left: 50%;
+            /* Add this to center the price element horizontally */
+            transform: translateX(-50%);
+            /* Add this to center the price element horizontally */
+            color: #000000;
+            font-size: 16px;
+            font-family: "Aclonica", sans-serif;
+            text-decoration: none;
+            border: 3px solid #000000;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 1);
+            padding: 5px 10px;
+            width: 60%;
+            text-align: center;
+        }
+
+        .prodname {
+            width: 95%;
+            position: absolute;
+            top: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #000000;
+            border: 3px solid #000000;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 1);
+            padding: 5px 10px;
+            margin-top: 10px;
+            font-size: 14px;
+            text-align: center;
+            font-family: "Aclonica", sans-serif;
+
+        }
+
+        .prodname:hover {
+            background-color: #000000;
+            color: rgb(255, 255, 255);
+        }
+
+        button.button {
+            background-color: #ffffff;
+            color: #000000;
+            font-size: 16px;
+            font-family: "Aclonica", sans-serif;
+            border: 2px solid black;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin: 3px;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+
+        button.button:hover {
+            background-color: #000000;
+            color: #f2f2f2;
+        }
+
+        .buttttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media screen and (max-width: 600px) {
+            .column {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% if user.is_authenticated %}
+    <div class="topnav">
+      <div id="name">TechDevShop</div>
+      <a href="{% url 'user_home' %}" class='main_buttons'>Profile</a>
+      <a href="{% url 'shop' %}" class='main_buttons'>Home</a>
+      <a href="{% url 'Cart' %}" class='main_buttons'>Cart</a>
+      <a href="{% url 'AboutUs' %}" class='main_buttons'>About Us</a>
+      <a href="{% url 'Contact' %}" class='main_buttons'>Contact</a>
+      <a href="{% url 'logout' %}" class='auth_button'>Logout</a>
+  </div>
+    
+        <div class="row">
+            {% for product in products %}
+            <div class="column">
+                <nav class="prodname">{{ product.prod_name }}</nav>
+                <img src="{% static 'images/' %}{{ product.sku }}.jpg">
+                <nav class="price">{{ product.price }}$</nav>
+                <div class="buttttons">
+                    <form method="post" action="{% url 'ordering' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="sku" value="{{ product.sku }}">
+                        <button type="submit" class="button">Buy</button>
+                    </form>
+                    <form method="post" action="{% url 'info' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="sku" value="{{ product.sku }}">
+                        <button type="submit" class="button">Info</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <a href="{% url 'login' %}" class='auth_button'>Login</a>
+        <a href="{% url 'register' %}" class='auth_button'>Registration</a>
+      {% endif %}
+    </body>
+    
+
+</html>

@@ -1,0 +1,156 @@
+</html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% load static %}
+
+  <title>TechDevShop</title>
+  <meta charset="utf-8">
+  <link href='https://fonts.googleapis.com/css?family=Aclonica' rel='stylesheet'>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Aclonica", sans-serif;
+      margin: 0;
+      background-color: #333;
+
+    }
+
+    .topnav {
+      overflow: hidden;
+      font-family: "Aclonica", sans-serif;
+      background-color: #1b1b1b;
+      display: flex;
+    }
+
+    .topnav a {
+      color: #f2f2f2;
+      font-size: 18px;
+      padding: 14px 16px;
+      font-family: "Alconica";
+      text-decoration: none;
+    }
+
+    .topnav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+    #name {
+      color: #f2f2f2;
+      font-family: "Aclonica", sans-serif;
+      font-size: 18px;
+      padding: 14px 16px;
+    }
+
+    .container {
+      font-family: "Aclonica", sans-serif;
+      display: flex;
+      align-items: center;
+    }
+
+
+
+    button.button:hover {
+      background-color: #000000;
+      color: #f2f2f2;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    label {
+      font-size: 18px;
+      font-family: "Aclonica", sans-serif;
+      flex-basis: 100%;
+      max-width: 100%;
+      display: flex;
+      color: rgb(255, 255, 255);
+      justify-content: center;
+      margin: 3px;
+    }
+
+    input {
+      flex-basis: 100%;
+      font-family: "Aclonica", sans-serif;
+      max-width: 50%;
+      padding: 10px;
+      border: 3px solid #000000;
+      border-radius: 5px;
+    }
+
+    textarea {
+      flex-basis: 100%;
+      font-family: "Aclonica", sans-serif;
+      width: 70%;
+      padding: 10px;
+      border: 3px solid #000000;
+      border-radius: 5px;
+    }
+
+    button.button {
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: #1b1b1b;
+      color: #f2f2f2;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      font-family: "Aclonica", sans-serif;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button.button:hover {
+      background-color: #000000;
+    }
+
+    h2 {
+      font-family: "Aclonica", sans-serif;
+      text-align: center;
+      color: #f2f2f2;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+      text-shadow: 2px 2px 4px #000000;
+
+    }
+  </style>
+</head>
+
+<body>
+  {% if user.is_authenticated %}
+  <div class="topnav">
+    <div id="name">TechDevShop</div>
+    <a href="{% url 'user_home' %}" class='main_buttons'>Profile</a>
+    <a href="{% url 'shop' %}" class='main_buttons'>Home</a>
+    <a href="{% url 'Cart' %}" class='main_buttons'>Cart</a>
+    <a href="{% url 'AboutUs' %}" class='main_buttons'>About Us</a>
+    <a href="{% url 'Contact' %}" class='main_buttons'>Contact</a>
+    <a href="{% url 'logout' %}" class='auth_button'>Logout</a>
+  </div>
+
+
+  {% block content %}
+  <h1>User Home Page</h1>
+  <p>Username: {{ user.username }}</p>
+  <p>First Name: {{ user.first_name }}</p>
+  <p>Last Name: {{ user.last_name }}</p>
+  <p>Email: {{ user.email }}</p>
+  <p>Address: {{ user.address }}</p>
+  <p>Phone Number: {{ user.phone_number }}</p>
+  <a href="{% url 'user_update' user.pk %}">Update Profile</a>
+  {% endblock content %}
+  {% else %}
+  <a href="{% url 'login' %}" class='auth_button'>Login</a>
+  <a href="{% url 'register' %}" class='auth_button'>Registration</a>
+  {% endif %}
+</body>
+
+</html>

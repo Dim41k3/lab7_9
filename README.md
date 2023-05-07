@@ -21,3 +21,13 @@ python manage.py runserver
 5. python manage.py migrate ( to create the schema )
 6. python manage.py createsuperuser ( then go to host/admin page )
 ```
+
+## Git
+
+```bash
+(once) git clone git@github.com:Dim41k3/lab7_9.git
+git checkout -b develop
+git add .
+git commit -m "description"
+git push origin develop
+```

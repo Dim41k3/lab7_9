@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% load static %}
+
+  <title>TechDevShop</title>
+  <meta charset="utf-8">
+  <link href='https://fonts.googleapis.com/css?family=Aclonica' rel='stylesheet'>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+{% block content %}
+  <h2>Login</h2>
+
+  {% if form.errors %}
+    <p>Your username and password didn't match. Please try again.</p>
+  {% endif %}
+
+  <form action="{% url 'login' %}" method="post">
+    {{form}}
+    {% csrf_token %}
+    <button type="submit">Login</button>
+  </form>
+
+{% endblock %}
+</body>
+
+</html>
+

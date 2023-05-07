@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TechDevShop</title>
+    <meta charset="utf-8">
+    <link href='https://fonts.googleapis.com/css?family=Aclonica' rel='stylesheet'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Aclonica", sans-serif;
+            margin: 0;
+            background-color: #333;
+
+        }
+
+        .topnav {
+            overflow: hidden;
+            font-family: "Aclonica", sans-serif;
+            background-color: #1b1b1b;
+            display: flex;
+        }
+
+        .topnav a {
+            color: #f2f2f2;
+            font-size: 18px;
+            padding: 14px 16px;
+            font-family: "Alconica";
+            text-decoration: none;
+        }
+
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        #name {
+            color: #f2f2f2;
+            font-family: "Aclonica", sans-serif;
+            font-size: 18px;
+            padding: 14px 16px;
+        }
+
+        .container {
+            font-family: "Aclonica", sans-serif;
+            display: flex;
+
+            margin: 20px;
+            align-items: center;
+        }
+
+        li {
+            font-family: "Aclonica", sans-serif;
+            display: inline;
+            margin: 20px;
+            height: 350px;
+            padding: 10px;
+            color: white;
+            background-color: #1b1b1b;
+            border: 3px solid #000000;
+            border-radius: 5px;
+        }
+
+
+
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+        input {
+            flex-basis: 100%;
+            font-family: "Aclonica", sans-serif;
+            width: 60%;
+            padding: 10px;
+            border: 3px solid #000000;
+            border-radius: 5px;
+        }
+
+        button.button {
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: "Aclonica", sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button.button:hover {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+
+        h2 {
+            font-family: "Aclonica", sans-serif;
+            text-align: center;
+            color: #f2f2f2;
+            font-size: 24px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+            text-shadow: 2px 2px 4px #000000;
+        }
+
+        h3 {
+            font-family: "Aclonica", sans-serif;
+            text-align: center;
+            color: #f2f2f2;
+            margin: 10px;
+        }
+
+        .proc {
+            font-family: "Aclonica", sans-serif;
+            text-align: center;
+            color: #f2f2f2;
+            text-shadow: 2px 5px 4px #000000;
+        }
+
+        .total {
+            font-family: "Aclonica", sans-serif;
+            margin: 10px;
+            color: #f2f2f2;
+            font-size: 24px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+            text-shadow: 2px 2px 4px #000000;
+        }
+    </style>
+
+<body>
+    {% if user.is_authenticated %}
+    <div class="topnav">
+      <div id="name">TechDevShop</div>
+      <a href="{% url 'user_home' %}" class='main_buttons'>Profile</a>
+      <a href="{% url 'shop' %}" class='main_buttons'>Home</a>
+      <a href="{% url 'Cart' %}" class='main_buttons'>Cart</a>
+      <a href="{% url 'AboutUs' %}" class='main_buttons'>About Us</a>
+      <a href="{% url 'Contact' %}" class='main_buttons'>Contact</a>
+      <a href="{% url 'logout' %}" class='auth_button'>Logout</a>
+  </div>
+    
+  <h2>Cart</h2>
+  {% if context %}
+      <h3 class="proc">Placement of order</h3>
+      <ul class="container">
+          {% for item in context.order_items %}
+              <li>
+                  <h3>{{ item.product.name }}</h3>
+                  <p>Quantity: {{ item.quantity }}</p>
+                  <p>Price: {{ item.product.price }}</p>
+                  <form method="POST" action="{% url 'cart' %}">
+                      {% csrf_token %}
+                      <input type="number" name="quantity" value="{{ item.quantity }}" required>
+                      <input type="hidden" name="product_id" value="{{ item.product_id }}" required>
+                      <button type="submit" class="button">Change Quantity</button>
+                  </form>
+                  <form method="POST" action="{% url 'cart' %}">
+                      {% csrf_token %}
+                      <input type="hidden" name="quantity" value="0" required>
+                      <input type="hidden" name="product_id" value="{{ item.product_id }}" required>
+                      <button type="submit" class="button">Remove Item</button>
+                  </form>
+              </li>
+          {% endfor %}
+      </ul>
+      <p class="total">Total Price: {{ total_price }}</p>
+      <form method="POST" action="{% url 'cart' %}">
+          {% csrf_token %}
+          <button type="submit" name="order_button" class="button">Order</button>
+      </form>
+      {% if placed_orders %}
+          <h3 class="proc">Placed</h3>
+          {% for order in placed_orders %}
+              <p class="proc">{{ order.created_at }} - {{ order.total_price }}</p>
+          {% endfor %}
+      {% endif %}
+      {% if completed_orders %}
+          <h3 class="proc">Completed</h3>
+          {% for order in completed_orders %}
+              <p class="proc">{{ order.created_at }} - {{ order.total_price }}</p>
+          {% endfor %}
+      {% endif %}
+  {% else %}
+      <p>Your cart is empty.</p>
+  {% endif %}
+{% endif %}
+  </body>
+
+
+</html>

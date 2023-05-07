@@ -1,0 +1,9 @@
+{
+  "DATABASE": {
+    "HOST": "localhost",
+    "USER": "postgres",
+    "PASSWORD": "admin",
+    "PORT": "5432",
+    "NAME": "tech_dev_shop"
+  }
+}

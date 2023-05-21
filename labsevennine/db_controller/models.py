@@ -5,6 +5,9 @@ class Inventory(models.Model):
     product = models.ForeignKey('ProductData', on_delete=models.CASCADE)
     quantity_in_stock = models.IntegerField()
 
+    def __str__(self):
+        return self.product.prod_name
+
     class Meta:
         db_table = 'inventory_data'
 
@@ -16,6 +19,9 @@ class OrderItem(models.Model):
     price = models.IntegerField()
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.product.prod_name
+
     class Meta:
         db_table = 'order_item'
 
@@ -24,6 +30,9 @@ class OrderData(models.Model):
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
     order_status = models.TextField()
     total_price = models.IntegerField()
+
+    def __str__(self):
+        return f"Order #{self.pk}"
 
     class Meta:
         db_table = 'order_data'
@@ -35,6 +44,9 @@ class ProductData(models.Model):
     price = models.IntegerField()
     description = models.TextField()
     category = models.TextField()
+
+    def __str__(self):
+        return self.prod_name
 
     class Meta:
         db_table = 'product_data'

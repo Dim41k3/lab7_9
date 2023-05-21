@@ -36,7 +36,7 @@
     .topnav {
       overflow: hidden;
       font-family: "Aclonica", sans-serif;
-      background-color: #333;
+      background-color: #1b1b1b;
       display: flex;
     }
 
@@ -101,13 +101,13 @@
     }
 
     #Cameras {
-      background-image: url("{% static 'images/SEN-TEMP-001.jpg' %}");
+      background-image: url("{% static 'images/CAM-SONY-001.jpg' %}");
       background-repeat: no-repeat;
       background-size: cover;
     }
 
     #Monitors {
-      background-image: url("{% static 'images/SEN-TEMP-001.jpg' %}");
+      background-image: url("{% static 'images/MON-LGUL-001.jpg' %}");
       background-repeat: no-repeat;
       background-size: cover;
     }
@@ -182,6 +182,29 @@
       justify-content: center;
       align-items: center;
     }
+
+    .auth_buttons_container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .auth_button {
+      background-color: #1e88e5;
+      color: white;
+      width: 20%;
+      text-align: center;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+
+    .auth_button:hover {
+      background-color: #1565c0;
+    }
   </style>
 </head>
 
@@ -194,8 +217,11 @@
     <a href="{% url 'Cart' %}" class='main_buttons'>Cart</a>
     <a href="{% url 'AboutUs' %}" class='main_buttons'>About Us</a>
     <a href="{% url 'Contact' %}" class='main_buttons'>Contact</a>
-    <a href="{% url 'logout' %}" class='auth_button'>Logout</a>
-</div>
+    {% if request.user.is_staff or request.user.is_superuser %}
+    <a href="/admin/" class="admin_button">Admin</a>
+    {% endif %}
+    <a href="{% url 'logout' %}">Logout</a>
+  </div>
 
   <div class="header">
     <div class="slider">
@@ -224,9 +250,13 @@
   </div>
 
   {% else %}
-  <a href="{% url 'login' %}" class='auth_button'>Login</a>
-  <a href="{% url 'register' %}" class='auth_button'>Registration</a>
-{% endif %}
+  <div class="auth_buttons_container">
+    <a href="{% url 'login' %}" class="auth_button">Login</a>
+    <br>
+    <a href="{% url 'register' %}" class="auth_button">Registration</a>
+  </div>
+
+  {% endif %}
 </body>
 
 </html>

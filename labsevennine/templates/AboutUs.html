@@ -29,7 +29,7 @@
             color: #f2f2f2;
             font-size: 18px;
             padding: 14px 16px;
-            font-family: "Alconica";
+            font-family: "Aclonica", sans-serif;
             text-decoration: none;
         }
 
@@ -55,7 +55,8 @@
 
         }
 
-        p, ul {
+        p,
+        ul {
             font-family: "Aclonica", sans-serif;
             color: #f2f2f2;
             margin: 20px;
@@ -65,14 +66,17 @@
 <body>
     {% if user.is_authenticated %}
     <div class="topnav">
-      <div id="name">TechDevShop</div>
-      <a href="{% url 'user_home' %}" class='main_buttons'>Profile</a>
-      <a href="{% url 'shop' %}" class='main_buttons'>Home</a>
-      <a href="{% url 'Cart' %}" class='main_buttons'>Cart</a>
-      <a href="{% url 'AboutUs' %}" class='main_buttons'>About Us</a>
-      <a href="{% url 'Contact' %}" class='main_buttons'>Contact</a>
-      <a href="{% url 'logout' %}" class='auth_button'>Logout</a>
-  </div>
+        <div id="name">TechDevShop</div>
+        <a href="{% url 'user_home' %}" class='main_buttons'>Profile</a>
+        <a href="{% url 'shop' %}" class='main_buttons'>Home</a>
+        <a href="{% url 'Cart' %}" class='main_buttons'>Cart</a>
+        <a href="{% url 'AboutUs' %}" class='main_buttons'>About Us</a>
+        <a href="{% url 'Contact' %}" class='main_buttons'>Contact</a>
+        {% if request.user.is_staff or request.user.is_superuser %}
+        <a href="/admin/" class="admin_button">Admin</a>
+        {% endif %}
+        <a href="{% url 'logout' %}">Logout</a>
+      </div>
     <main>
         <h2>About Us</h2>
         <p>We are a team of technology enthusiasts who are passionate about bringing the latest and greatest gadgets to
@@ -93,5 +97,5 @@
     {% else %}
     <a href="{% url 'login' %}" class='auth_button'>Login</a>
     <a href="{% url 'register' %}" class='auth_button'>Registration</a>
-  {% endif %}
+    {% endif %}
 </body>

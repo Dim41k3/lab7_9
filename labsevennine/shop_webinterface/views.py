@@ -20,74 +20,171 @@ def ordering(request):
     else:
         return HttpResponse("Error processing your request.")
 
+def info(request):
+    if request.method == 'POST':
+        try:
+            sku = request.POST.get('sku')
+            for item in ProductData.objects.filter(sku=sku):
+                prod_name = item.prod_name
+                category = item.category
+                description = item.description
+            context = {"d_prod":{"prod_name":prod_name, "category":category,"description":description,
+                                 "sku":sku}}
+            return render(request, 'info.html', context)
+        except Exception as e:
+            print("ordering", e)
+            return HttpResponse("Error processing your request.")
+    else:
+        return HttpResponse("Error processing your request.")
+
 def sensors(request):
     products = ProductData.objects.filter(category="Sensor")
-    print (products)
-    return render(request, 'sensors.html', {"products": products})
+    prod_dict = {}
+    for product in products:
+        qr_obj = Inventory.objects.filter(product = product.id)
+        for object in qr_obj:
+            quantity_in_stock = object.quantity_in_stock
+        prod_dict[product.sku] = {"prod_name": product.prod_name, "price": product.price,
+                                          "quantity":quantity_in_stock}
+    return render(request, 'sensors.html', {"products": prod_dict})
 
 def cameras(request):
     products = ProductData.objects.filter(category="Camera")
-    return render(request, 'sensors.html', {"products": products})
+    prod_dict = {}
+    for product in products:
+        qr_obj = Inventory.objects.filter(product = product.id)
+        for object in qr_obj:
+            quantity_in_stock = object.quantity_in_stock
+        prod_dict[product.sku] = {"prod_name": product.prod_name, "price": product.price,
+                                          "quantity":quantity_in_stock}
+    return render(request, 'cameras.html', {"products": prod_dict})
 
 def monitors(request):
     products = ProductData.objects.filter(category="Monitor")
-    return render(request, 'sensors.html', {"products": products})
-
+    prod_dict = {}
+    for product in products:
+        qr_obj = Inventory.objects.filter(product = product.id)
+        for object in qr_obj:
+            quantity_in_stock = object.quantity_in_stock
+        prod_dict[product.sku] = {"prod_name": product.prod_name, "price": product.price,
+                                          "quantity":quantity_in_stock}
+    return render(request, 'monitors.html', {"products": prod_dict})
 def controllers(request):
     products = ProductData.objects.filter(category="Controller")
-    return render(request, 'sensors.html', {"products": products})
-
+    prod_dict = {}
+    for product in products:
+        qr_obj = Inventory.objects.filter(product = product.id)
+        for object in qr_obj:
+            quantity_in_stock = object.quantity_in_stock
+        prod_dict[product.sku] = {"prod_name": product.prod_name, "price": product.price,
+                                          "quantity":quantity_in_stock}
+    return render(request, 'controllers.html', {"products": prod_dict})
 def routers(request):
     products = ProductData.objects.filter(category="Router")
-    return render(request, 'sensors.html', {"products": products})
+    prod_dict = {}
+    for product in products:
+        qr_obj = Inventory.objects.filter(product = product.id)
+        for object in qr_obj:
+            quantity_in_stock = object.quantity_in_stock
+        prod_dict[product.sku] = {"prod_name": product.prod_name, "price": product.price,
+                                          "quantity":quantity_in_stock}
+    return render(request, 'routers.html', {"products": prod_dict})
 
 @login_required(login_url='login')
 def cart(request):
-    email = request.user.email
-    customer_id = request.user.id
-    context = {}
     total_price = 0
-    
-    if request.method == 'POST':
-        try:
-            quantity = request.POST.get("quantity")
-            if quantity is not None:
-                quantity = int(quantity)
-            product_id = request.POST.get("product_id")
-            if product_id is not None:
-                product_id = int(product_id)       
-                
-            order_items = OrderItem.objects.filter(customer_id=customer_id, order_id=None)
-            for i in order_items:
-                if i.quantity <= 0:
-                    i.delete()
+    context = {}
+    items_dict = {}
+    placed_orders = {}
+    completed_orders = {}
+    user = request.user.id
+    try:
+        if request.method == "POST":
+            additional_message = None
+            if 'order_button' in request.POST:
+                order_items = OrderItem.objects.filter(order_id=None, customer_id=user)
+                total_price = 0
+                for order_item in order_items:
+                    total_price += order_item.quantity * order_item.price
+                    inventory_obj = Inventory.objects.filter(product_id = order_item.product_id)
+                    for object in inventory_obj:
+                        print(object)
+                        object.quantity_in_stock = object.quantity_in_stock - order_item.quantity
+                        object.save()
+                new_order = OrderData(order_status="placed", total_price=total_price, customer_id=user)
+                new_order.save()
+                for order_item in order_items:
+                    order_item.order_id = new_order.id
+                    order_item.save()
+                return redirect('Cart')
+            else:
+                quantity = request.POST.get("quantity")
+                if quantity is not None:
+                    quantity = int(quantity)
+                product_id = request.POST.get("product_id")
+                inventory_obj = Inventory.objects.filter(product_id = product_id)
+                for object in inventory_obj:
+                    quantity_in_stock = object.quantity_in_stock
+                if product_id is not None:
+                    product_id = int(product_id)
+                if quantity <= 0:
+                    OrderItem.objects.filter(product_id = product_id, order_id = None).delete()
+                elif quantity > quantity_in_stock:
+                    additional_message = "We don't how so much"
                 else:
-                    i.save()
-
-            context = {'order_items': order_items}
-            total_price = sum([item.product.price * item.quantity for item in order_items])
-            
-            if 'order_button' in request.POST and len(order_items) > 0:
-                order = OrderData.objects.create(customer_id=customer_id, order_status='Placed', total_price=total_price)
-                for item in order_items:
-                    item.order_id = order.id
-                    item.save()
-                context['placed_orders'] = OrderData.objects.filter(customer_id=customer_id, order_status='Placed')
-                context['completed_orders'] = OrderData.objects.filter(customer_id=customer_id, order_status='Completed')
-                return render(request, 'cart.html', context)
-            
-            context['placed_orders'] = OrderData.objects.filter(customer_id=customer_id, order_status='Placed')
-            context['completed_orders'] = OrderData.objects.filter(customer_id=customer_id, order_status='Completed')
-            return render(request, 'cart.html', context)
-        except Exception as e:
-            print("cart", e)
-            return HttpResponse("Error processing your request.")
-    else:
-        order_items = OrderItem.objects.filter(customer_id=customer_id, order_id=None)
-        context = {'order_items': order_items}
-        total_price = sum([item.product.price * item.quantity for item in order_items])
-        context['total_price'] = total_price
-        context['placed_orders'] = OrderData.objects.filter(customer_id=customer_id, order_status='Placed')
-        context['completed_orders'] = OrderData.objects.filter(customer_id=customer_id, order_status='Completed')
-        return render(request, 'cart.html', context)
-
+                    OrderItem.objects.filter(product_id=product_id, order_id=None).update(quantity=quantity)
+                for order_item in OrderItem.objects.filter(order_id=None, customer_id = user ):
+                    product_name = order_item.product.prod_name
+                    sku = order_item.product.sku
+                    items_dict[product_name] = {"price":order_item.quantity*order_item.price,"sku":sku,
+                                                "quantity":order_item.quantity, "product_id": order_item.product_id,}
+                    total_price += items_dict[product_name]["price"]
+                for placed_item in OrderData.objects.filter(order_status = "placed", customer_id = user):
+                    for order_item in OrderItem.objects.filter(order_id=placed_item.id, customer_id = user ):
+                        product_name = order_item.product.prod_name
+                        sku = order_item.product.sku
+                        placed_orders[product_name] = {"price":order_item.quantity*order_item.price,"sku":sku,
+                                            "quantity":order_item.quantity, "product_id": order_item.product_id}
+                for completed_item in OrderData.objects.filter(order_status = "completed", customer_id = user):
+                    for order_item in OrderItem.objects.filter(order_id=completed_item.id, customer_id = user ):
+                        product_name = order_item.product.prod_name
+                        sku = order_item.product.sku
+                        completed_orders[product_name] = {"price":order_item.quantity*order_item.price,"sku":sku,
+                                            "quantity":order_item.quantity, "product_id": order_item.product_id}
+                context = {
+                    'order_items': items_dict,
+                    'total_price': total_price,
+                    'placed_orders': placed_orders,
+                    'completed_orders': completed_orders,
+                    "additional_message": additional_message
+                    }
+                print(context)
+        else:
+            for order_item in OrderItem.objects.filter(order_id=None, customer_id = user ):
+                    product_name = order_item.product.prod_name
+                    sku = order_item.product.sku
+                    items_dict[product_name] = {"price":order_item.quantity*order_item.price,"sku":sku,
+                                                "quantity":order_item.quantity, "product_id": order_item.product_id,}
+                    total_price += items_dict[product_name]["price"]
+            for placed_item in OrderData.objects.filter(order_status = "placed", customer_id = user):
+                for order_item in OrderItem.objects.filter(order_id=placed_item.id, customer_id = user ):
+                    product_name = order_item.product.prod_name
+                    sku = order_item.product.sku
+                    placed_orders[product_name] = {"price":order_item.quantity*order_item.price,"sku":sku,
+                                            "quantity":order_item.quantity, "product_id": order_item.product_id}
+            for completed_item in OrderData.objects.filter(order_status = "completed", customer_id = user):
+                for order_item in OrderItem.objects.filter(order_id=completed_item.id, customer_id = user ):
+                    product_name = order_item.product.prod_name
+                    sku = order_item.product.sku
+                    completed_orders[product_name] = {"price":order_item.quantity*order_item.price,"sku":sku,
+                                            "quantity":order_item.quantity, "product_id": order_item.product_id}
+                context = {
+                'order_items': items_dict,
+                'total_price': total_price,
+                'placed_orders': placed_orders,
+                'completed_orders': completed_orders
+                }
+            print(context)
+    except Exception as e:
+        print(e)
+    return render(request, 'Cart.html', context)

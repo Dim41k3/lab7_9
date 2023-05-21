@@ -24,4 +24,6 @@ urlpatterns = [
     path('routers', views.routers, name='routers'),
     path('Cart', views.cart, name='Cart'),
     path('ordering', views.ordering, name='ordering'),
+    path('info', views.info, name='info'),
+
 ]

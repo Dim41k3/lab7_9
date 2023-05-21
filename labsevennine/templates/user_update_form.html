@@ -1,4 +1,5 @@
 </html>
+
 </html>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +34,7 @@
       color: #f2f2f2;
       font-size: 18px;
       padding: 14px 16px;
-      font-family: "Alconica";
+      font-family: "Aclonica", sans-serif;
       text-decoration: none;
     }
 
@@ -49,18 +50,6 @@
       padding: 14px 16px;
     }
 
-    .container {
-      font-family: "Aclonica", sans-serif;
-      display: flex;
-      align-items: center;
-    }
-
-
-
-    button.button:hover {
-      background-color: #000000;
-      color: #f2f2f2;
-    }
 
     form {
       display: flex;
@@ -76,51 +65,47 @@
       display: flex;
       color: rgb(255, 255, 255);
       justify-content: center;
-      margin: 3px;
     }
 
     input {
       flex-basis: 100%;
+      width: auto;
       font-family: "Aclonica", sans-serif;
-      max-width: 50%;
-      padding: 10px;
-      border: 3px solid #000000;
+      padding: 5px 10px;
+      border: 3px solid #747474;
+      background-color: #000000;
+      color: white;
+      text-align: center;
       border-radius: 5px;
     }
 
-    textarea {
-      flex-basis: 100%;
-      font-family: "Aclonica", sans-serif;
-      width: 70%;
-      padding: 10px;
-      border: 3px solid #000000;
-      border-radius: 5px;
-    }
-
-    button.button {
-      margin: 5px;
-      padding: 10px 20px;
-      background-color: #1b1b1b;
-      color: #f2f2f2;
-      border: none;
-      border-radius: 5px;
+    .button {
+      width: 100%;
+      background-color: #000000;
+      color: #ffffff;
       font-size: 16px;
       font-family: "Aclonica", sans-serif;
+      border: 2px solid #747474;
+      ;
+      border-radius: 5px;
+      padding: 10px 20px;
+      margin: 5px;
       cursor: pointer;
-      transition: background-color 0.3s;
     }
 
-    button.button:hover {
-      background-color: #000000;
+    .button:hover {
+      background-color: #ffffff;
+      color: #000000;
     }
 
-    h2 {
+    h1 {
       font-family: "Aclonica", sans-serif;
       text-align: center;
       color: #f2f2f2;
-      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+      font-size: 24px;
+      box-shadow: 0px 0px 20px rgba(255, 0, 0, 1);
       text-shadow: 2px 2px 4px #000000;
-
+      margin-bottom: 20px;
     }
   </style>
 </head>
@@ -134,16 +119,19 @@
     <a href="{% url 'Cart' %}" class='main_buttons'>Cart</a>
     <a href="{% url 'AboutUs' %}" class='main_buttons'>About Us</a>
     <a href="{% url 'Contact' %}" class='main_buttons'>Contact</a>
-    <a href="{% url 'logout' %}" class='auth_button'>Logout</a>
+    {% if request.user.is_staff or request.user.is_superuser %}
+    <a href="/admin/" class="admin_button">Admin</a>
+    {% endif %}
+    <a href="{% url 'logout' %}">Logout</a>
   </div>
   {% block content %}
   <h1>Update Profile</h1>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Save</button>
+    <button type="submit" class="button">Save</button>
   </form>
-{% endblock content %}
+  {% endblock content %}
   {% else %}
   <a href="{% url 'login' %}" class='auth_button'>Login</a>
   <a href="{% url 'register' %}" class='auth_button'>Registration</a>

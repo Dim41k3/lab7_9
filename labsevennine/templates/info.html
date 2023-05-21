@@ -120,18 +120,21 @@
 <body>
     {% if user.is_authenticated %}
     <div class="topnav">
-      <div id="name">TechDevShop</div>
-      <a href="{% url 'user_home' %}" class='main_buttons'>Profile</a>
-      <a href="{% url 'shop' %}" class='main_buttons'>Home</a>
-      <a href="{% url 'Cart' %}" class='main_buttons'>Cart</a>
-      <a href="{% url 'AboutUs' %}" class='main_buttons'>About Us</a>
-      <a href="{% url 'Contact' %}" class='main_buttons'>Contact</a>
-      <a href="{% url 'logout' %}" class='auth_button'>Logout</a>
-  </div>
+        <div id="name">TechDevShop</div>
+        <a href="{% url 'user_home' %}" class='main_buttons'>Profile</a>
+        <a href="{% url 'shop' %}" class='main_buttons'>Home</a>
+        <a href="{% url 'Cart' %}" class='main_buttons'>Cart</a>
+        <a href="{% url 'AboutUs' %}" class='main_buttons'>About Us</a>
+        <a href="{% url 'Contact' %}" class='main_buttons'>Contact</a>
+        {% if request.user.is_staff or request.user.is_superuser %}
+        <a href="/admin/" class="admin_button">Admin</a>
+        {% endif %}
+        <a href="{% url 'logout' %}">Logout</a>
+      </div>
     {% if d_prod %}
     <h2>Product Information</h2>
     <div class="container">
-        <img src="{% static 'images/' %}{{ sku }}.jpg">
+        <img src="{% static 'images/' %}{{ d_prod.sku }}.jpg">
         <div>
             <p class="prodname">Item: {{ d_prod.prod_name }}</p>
             <p class="category">Category: {{ d_prod.category }}</p>
@@ -142,7 +145,7 @@
     <p class="description">Description: {{ d_prod.description }}</p>
     <form method="post" action="{% url 'ordering' %}">
         {% csrf_token %}
-        <input type="hidden" name="sku" value="{{ sku }}">
+        <input type="hidden" name="sku" value="{{ d_prod.sku }}">
         <button type="submit" class="button">Buy</button>
     </form>
     {% endif %}

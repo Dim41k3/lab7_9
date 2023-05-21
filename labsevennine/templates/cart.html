@@ -1,199 +1,329 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>TechDevShop</title>
-    <meta charset="utf-8">
-    <link href='https://fonts.googleapis.com/css?family=Aclonica' rel='stylesheet'>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+  {% load static %}
 
-        body {
-            font-family: "Aclonica", sans-serif;
-            margin: 0;
-            background-color: #333;
+  <title>TechDevShop</title>
+  <meta charset="utf-8">
+  <link href='https://fonts.googleapis.com/css?family=Aclonica' rel='stylesheet'>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-        }
+    body {
+      font-family: "Aclonica", sans-serif;
+      margin: 0;
+      background-color: #333;
 
-        .topnav {
-            overflow: hidden;
-            font-family: "Aclonica", sans-serif;
-            background-color: #1b1b1b;
-            display: flex;
-        }
+    }
 
-        .topnav a {
-            color: #f2f2f2;
-            font-size: 18px;
-            padding: 14px 16px;
-            font-family: "Alconica";
-            text-decoration: none;
-        }
+    .topnav {
+      overflow: hidden;
+      font-family: "Aclonica", sans-serif;
+      background-color: #1b1b1b;
+      display: flex;
+    }
 
-        .topnav a:hover {
-            background-color: #ddd;
-            color: black;
-        }
+    .topnav a {
+      color: #f2f2f2;
+      font-size: 18px;
+      padding: 14px 16px;
+      font-family: "Aclonica", sans-serif;
+      text-decoration: none;
+    }
 
-        #name {
-            color: #f2f2f2;
-            font-family: "Aclonica", sans-serif;
-            font-size: 18px;
-            padding: 14px 16px;
-        }
+    .topnav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
 
-        .container {
-            font-family: "Aclonica", sans-serif;
-            display: flex;
+    #name {
+      color: #f2f2f2;
+      font-family: "Aclonica", sans-serif;
+      font-size: 18px;
+      padding: 14px 16px;
+    }
 
-            margin: 20px;
-            align-items: center;
-        }
+    .row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
 
-        li {
-            font-family: "Aclonica", sans-serif;
-            display: inline;
-            margin: 20px;
-            height: 350px;
-            padding: 10px;
-            color: white;
-            background-color: #1b1b1b;
-            border: 3px solid #000000;
-            border-radius: 5px;
-        }
+    .column {
+      position: relative;
+      width: 17%;
+      height: 300px;
+      display: inline;
 
+    }
 
+    .column img {
+      width: 100%;
+      height: 125px;
+      border: 3px solid #000000;
+      border-radius: 5px;
+    }
 
+    .price {
+      width: auto;
+      position: relative;
+      color: #000000;
+      border: 3px solid #000000;
+      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 1);
+      padding: 5px 10px;
+      margin: 3px;
+      margin-bottom: 5px;
+      font-size: 14px;
+      text-align: center;
+      font-family: "Aclonica", sans-serif;
+    }
 
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    .quantity {
+      width: auto;
+      position: relative;
+      color: #000000;
+      border: 3px solid #000000;
+      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 1);
+      padding: 5px 10px;
+      margin: 3px;
+      margin-bottom: 5px;
+      font-size: 14px;
+      text-align: center;
+      font-family: "Aclonica", sans-serif;
+    }
 
+    .additional_message {
+      width: auto;
+      position: relative;
+      color: #ff0000;
+      border: 3px solid #000000;
+      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 1);
+      padding: 5px 10px;
+      margin: 3px;
+      margin-bottom: 5px;
+      font-size: 14px;
+      text-align: center;
+      font-family: "Aclonica", sans-serif;
+    }
 
-        input {
-            flex-basis: 100%;
-            font-family: "Aclonica", sans-serif;
-            width: 60%;
-            padding: 10px;
-            border: 3px solid #000000;
-            border-radius: 5px;
-        }
+    .ad .prodname {
+      width: auto;
+      position: relative;
+      color: #000000;
+      border: 3px solid #000000;
+      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 1);
+      padding: 5px 10px;
+      margin: 3px;
+      margin-bottom: 5px;
+      font-size: 14px;
+      text-align: center;
+      font-family: "Aclonica", sans-serif;
+    }
 
-        button.button {
-            margin: 5px;
-            padding: 10px 20px;
-            background-color: #ffffff;
-            color: #000000;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-family: "Aclonica", sans-serif;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+    .prodname:hover {
+      background-color: #000000;
+      color: rgb(255, 255, 255);
+    }
 
-        button.button:hover {
-            background-color: #000000;
-            color: #ffffff;
-        }
+    .button {
+      width: 100%;
+      background-color: #000000;
+      color: #ffffff;
+      font-size: 16px;
+      font-family: "Aclonica", sans-serif;
+      border: 2px solid #747474;
+      ;
+      border-radius: 5px;
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+    }
 
+    .button:hover {
+      background-color: #ffffff;
+      color: #000000;
+    }
 
-        h2 {
-            font-family: "Aclonica", sans-serif;
-            text-align: center;
-            color: #f2f2f2;
-            font-size: 24px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
-            text-shadow: 2px 2px 4px #000000;
-        }
+    @media screen and (max-width: 600px) {
+      .column {
+        width: 100%;
+      }
+    }
 
-        h3 {
-            font-family: "Aclonica", sans-serif;
-            text-align: center;
-            color: #f2f2f2;
-            margin: 10px;
-        }
+    .total {
+      margin-top: 20px;
+      font-family: "Aclonica", sans-serif;
+      text-align: center;
+      font-size: 24px;
+      color: #f2f2f2;
+      box-shadow: 0px -5px 15px rgba(94, 255, 0, 0.8);
+      text-shadow: 2px 2px 2px #000000;
+    }
 
-        .proc {
-            font-family: "Aclonica", sans-serif;
-            text-align: center;
-            color: #f2f2f2;
-            text-shadow: 2px 5px 4px #000000;
-        }
+    h2 {
+      font-family: "Aclonica", sans-serif;
+      text-align: center;
+      color: #f2f2f2;
+      font-size: 24px;
+      box-shadow: 0px 0px 20px rgba(255, 0, 0, 1);
+      text-shadow: 2px 2px 4px #000000;
+      margin-bottom: 20px;
+    }
 
-        .total {
-            font-family: "Aclonica", sans-serif;
-            margin: 10px;
-            color: #f2f2f2;
-            font-size: 24px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
-            text-shadow: 2px 2px 4px #000000;
-        }
-    </style>
+    h3 {
+      margin-top: auto;
+      font-family: "Aclonica", sans-serif;
+      text-align: center;
+      color: #f2f2f2;
+      box-shadow: 0px 5px 15px rgba(94, 255, 0, 0.8);
+      text-shadow: 2px 2px 2px #000000;
+    }
+
+    .placed {
+      margin-top: 20px;
+      font-family: "Aclonica", sans-serif;
+      text-align: center;
+      color: #f2f2f2;
+      box-shadow: 0px 5px 15px rgba(0, 140, 255, 0.8);
+      text-shadow: 2px 2px 2px #000000;
+    }
+
+    .completed {
+      margin-top: 20px;
+      font-family: "Aclonica", sans-serif;
+      text-align: center;
+      color: #f2f2f2;
+      box-shadow: 0px 5px 15px rgba(255, 166, 0, 0.8);
+      text-shadow: 2px 2px 2px #000000;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    input {
+      flex-basis: 100%;
+      font-family: "Aclonica", sans-serif;
+      width: auto;
+      padding: 5px 10px;
+      border: 3px solid #747474;
+      background-color: #000000;
+      color: white;
+      text-align: center;
+      border-radius: 5px;
+      margin-bottom: 5px;
+    }
+
+    .container {
+      font-family: "Aclonica", sans-serif;
+      margin: 5px;
+      height: auto;
+      padding: 10px;
+      color: white;
+      background-color: #1b1b1b;
+      border: 3px solid #000000;
+      border-radius: 5px;
+      align-items: center;
+    }
+  </style>
+</head>
 
 <body>
-    {% if user.is_authenticated %}
-    <div class="topnav">
-      <div id="name">TechDevShop</div>
-      <a href="{% url 'user_home' %}" class='main_buttons'>Profile</a>
-      <a href="{% url 'shop' %}" class='main_buttons'>Home</a>
-      <a href="{% url 'Cart' %}" class='main_buttons'>Cart</a>
-      <a href="{% url 'AboutUs' %}" class='main_buttons'>About Us</a>
-      <a href="{% url 'Contact' %}" class='main_buttons'>Contact</a>
-      <a href="{% url 'logout' %}" class='auth_button'>Logout</a>
+  {% if user.is_authenticated %}
+  <div class="topnav">
+    <div id="name">TechDevShop</div>
+    <a href="{% url 'user_home' %}" class='main_buttons'>Profile</a>
+    <a href="{% url 'shop' %}" class='main_buttons'>Home</a>
+    <a href="{% url 'Cart' %}" class='main_buttons'>Cart</a>
+    <a href="{% url 'AboutUs' %}" class='main_buttons'>About Us</a>
+    <a href="{% url 'Contact' %}" class='main_buttons'>Contact</a>
+    {% if request.user.is_staff or request.user.is_superuser %}
+    <a href="/admin/" class="admin_button">Admin</a>
+    {% endif %}
+    <a href="{% url 'logout' %}">Logout</a>
   </div>
-    
   <h2>Cart</h2>
-  {% if context %}
-      <h3 class="proc">Placement of order</h3>
-      <ul class="container">
-          {% for item in context.order_items %}
-              <li>
-                  <h3>{{ item.product.name }}</h3>
-                  <p>Quantity: {{ item.quantity }}</p>
-                  <p>Price: {{ item.product.price }}</p>
-                  <form method="POST" action="{% url 'cart' %}">
-                      {% csrf_token %}
-                      <input type="number" name="quantity" value="{{ item.quantity }}" required>
-                      <input type="hidden" name="product_id" value="{{ item.product_id }}" required>
-                      <button type="submit" class="button">Change Quantity</button>
-                  </form>
-                  <form method="POST" action="{% url 'cart' %}">
-                      {% csrf_token %}
-                      <input type="hidden" name="quantity" value="0" required>
-                      <input type="hidden" name="product_id" value="{{ item.product_id }}" required>
-                      <button type="submit" class="button">Remove Item</button>
-                  </form>
-              </li>
-          {% endfor %}
-      </ul>
-      <p class="total">Total Price: {{ total_price }}</p>
-      <form method="POST" action="{% url 'cart' %}">
+
+  {% if order_items %}
+  <h3>Placement of order</h3>
+  <div class="row">
+    {% for product_name, item in order_items.items %}
+    <ul class="container">
+      <div class="column">
+        <nav class="prodname">{{ product_name }}</nav>
+        <img src="{% static 'images/' %}{{item.sku}}.jpg">
+        <nav class="price">{{ item.price }}$</nav>
+        <nav class="quantity">Quantity: {{ item.quantity }}</nav>
+        {% if additional_message %}
+        <nav class="additional_message">Quantity: {{ additional_message }}</nav>
+        {% endif %}
+        <form method="POST" action="{% url 'Cart' %}">
           {% csrf_token %}
-          <button type="submit" name="order_button" class="button">Order</button>
-      </form>
-      {% if placed_orders %}
-          <h3 class="proc">Placed</h3>
-          {% for order in placed_orders %}
-              <p class="proc">{{ order.created_at }} - {{ order.total_price }}</p>
-          {% endfor %}
-      {% endif %}
-      {% if completed_orders %}
-          <h3 class="proc">Completed</h3>
-          {% for order in completed_orders %}
-              <p class="proc">{{ order.created_at }} - {{ order.total_price }}</p>
-          {% endfor %}
-      {% endif %}
-  {% else %}
-      <p>Your cart is empty.</p>
+          <input type="number" name="quantity" value="{{ item.quantity }}" required>
+          <input type="hidden" name="product_id" value="{{ item.product_id }}" required>
+          <button type="submit" class="button">Change Quantity</button>
+        </form>
+        <form method="POST" action="{% url 'Cart' %}">
+          {% csrf_token %}
+          <input type="hidden" name="quantity" value="0" required>
+          <input type="hidden" name="product_id" value="{{ item.product_id }}" required>
+          <button type="submit" class="button">Remove Item</button>
+        </form>
+      </div>
+    </ul>
+    {% endfor %}
+  </div>
+  <p class="total">Total Price: {{ total_price }}</p>
+  <form method="POST" action="{% url 'Cart' %}">
+    {% csrf_token %}
+    <button type="submit" name="order_button" class="button">Order</button>
+  </form>
   {% endif %}
-{% endif %}
-  </body>
+  {% if placed_orders %}
+  <h3 class="placed">Placed</h3>
+  <div class="row">
+    {% for product_name, item in placed_orders.items %}
+    <ul class="container">
+      <div class="column">
+        <nav class="prodname">{{ product_name }}</nav>
+        <img src="{% static 'images/' %}{{item.sku}}.jpg">
+        <nav class="price">{{ item.price }}$</nav>
+        <nav class="quantity">Quantity: {{ item.quantity }}</nav>
+      </div>
+    </ul>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% if completed_orders %}
+  <h3 class="completed">Completed</h3>
+  <div class="row">
+    {% for product_name, item in completed_orders.items %}
+    <ul class="container">
+      <div class="column">
+        <nav class="prodname">{{ product_name }}</nav>
+        <img src="{% static 'images/' %}{{item.sku}}.jpg">
+        <nav class="price">{{ item.price }}$</nav>
+        <nav class="quantity">Quantity: {{ item.quantity }}</nav>
+      </div>
+    </ul>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% else %}
+  <a href="{% url 'login' %}" class=''>Login</a>
+  <a href="{% url 'register' %}" class='auth_button'>Registration</a>
+  {% endif %}
+</body>
 
 
 </html>

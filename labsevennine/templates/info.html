@@ -115,6 +115,37 @@
             text-shadow: 2px 2px 4px #000000;
 
         }
+
+        #sform {
+            display: block;
+            margin-right: auto;
+        }
+
+        #query {
+            flex-basis: 100%;
+            width: auto;
+            margin-left: auto;
+            font-family: "Aclonica", sans-serif;
+            padding: 5px 10px;
+            border: 3px solid #747474;
+            background-color: #ffffff;
+            color: rgb(0, 0, 0);
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        #search_button {
+            flex-basis: 100%;
+            width: auto;
+            font-family: "Aclonica", sans-serif;
+            padding: 5px 10px;
+            margin-top: 10px;
+            border: 3px solid #747474;
+            background-color: #000000;
+            color: rgb(255, 255, 255);
+            text-align: center;
+            border-radius: 5px;
+        }
     </style>
 
 <body>
@@ -130,7 +161,12 @@
         <a href="/admin/" class="admin_button">Admin</a>
         {% endif %}
         <a href="{% url 'logout' %}">Logout</a>
-      </div>
+        <form method="post" action="{% url 'search_res' %}" id='sform'>
+            {% csrf_token %}
+            <input type="text" id="query" name="query">
+            <input type="submit" value="Search" id="search_button">
+        </form>
+    </div>
     {% if d_prod %}
     <h2>Product Information</h2>
     <div class="container">
@@ -152,5 +188,5 @@
     {% else %}
     <a href="{% url 'login' %}" class='auth_button'>Login</a>
     <a href="{% url 'register' %}" class='auth_button'>Registration</a>
-  {% endif %}
+    {% endif %}
 </body>

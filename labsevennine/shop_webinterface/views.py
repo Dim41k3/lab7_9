@@ -13,6 +13,7 @@ def ordering(request):
             order_item = OrderItem(quantity=1, price=product.price, product_id=product.id, 
                                     customer_id=request.user.id, order_id=None)
             order_item.save()
+            print(order_item)
             return render(request, 'shop.html')
         except Exception as e:
             print("ordering", e)
@@ -26,10 +27,11 @@ def info(request):
             sku = request.POST.get('sku')
             for item in ProductData.objects.filter(sku=sku):
                 prod_name = item.prod_name
+                price = item.price
                 category = item.category
                 description = item.description
             context = {"d_prod":{"prod_name":prod_name, "category":category,"description":description,
-                                 "sku":sku}}
+                                 "sku":sku, "price":price}}
             return render(request, 'info.html', context)
         except Exception as e:
             print("ordering", e)
@@ -41,54 +43,160 @@ def sensors(request):
     products = ProductData.objects.filter(category="Sensor")
     prod_dict = {}
     for product in products:
-        qr_obj = Inventory.objects.filter(product = product.id)
+        qr_obj = Inventory.objects.filter(product=product.id)
         for object in qr_obj:
             quantity_in_stock = object.quantity_in_stock
-        prod_dict[product.sku] = {"prod_name": product.prod_name, "price": product.price,
-                                          "quantity":quantity_in_stock}
+        prod_dict[product.sku] = {
+            "prod_name": product.prod_name,
+            "price": product.price,
+            "quantity": quantity_in_stock
+        }
+    
+    if 'sort_by_price' in request.POST:
+        sorted_by_price = dict(sorted(prod_dict.items(), key=lambda x: x[1]["price"]))
+        return render(request, 'sensors.html', {"products": sorted_by_price})
+    
+    if 'sort_by_name' in request.POST:
+        sorted_by_name = dict(sorted(prod_dict.items(), key=lambda x: x[1]["prod_name"]))
+        return render(request, 'sensors.html', {"products": sorted_by_name})
+    
     return render(request, 'sensors.html', {"products": prod_dict})
 
 def cameras(request):
     products = ProductData.objects.filter(category="Camera")
     prod_dict = {}
     for product in products:
-        qr_obj = Inventory.objects.filter(product = product.id)
+        qr_obj = Inventory.objects.filter(product=product.id)
         for object in qr_obj:
             quantity_in_stock = object.quantity_in_stock
-        prod_dict[product.sku] = {"prod_name": product.prod_name, "price": product.price,
-                                          "quantity":quantity_in_stock}
+        prod_dict[product.sku] = {
+            "prod_name": product.prod_name,
+            "price": product.price,
+            "quantity": quantity_in_stock
+        }
+    
+    if 'sort_by_price' in request.POST:
+        sorted_by_price = dict(sorted(prod_dict.items(), key=lambda x: x[1]["price"]))
+        return render(request, 'cameras.html', {"products": sorted_by_price})
+    
+    if 'sort_by_name' in request.POST:
+        sorted_by_name = dict(sorted(prod_dict.items(), key=lambda x: x[1]["prod_name"]))
+        return render(request, 'cameras.html', {"products": sorted_by_name})
+    
     return render(request, 'cameras.html', {"products": prod_dict})
 
 def monitors(request):
     products = ProductData.objects.filter(category="Monitor")
     prod_dict = {}
     for product in products:
-        qr_obj = Inventory.objects.filter(product = product.id)
+        qr_obj = Inventory.objects.filter(product=product.id)
         for object in qr_obj:
             quantity_in_stock = object.quantity_in_stock
-        prod_dict[product.sku] = {"prod_name": product.prod_name, "price": product.price,
-                                          "quantity":quantity_in_stock}
+        prod_dict[product.sku] = {
+            "prod_name": product.prod_name,
+            "price": product.price,
+            "quantity": quantity_in_stock
+        }
+    
+    if 'sort_by_price' in request.POST:
+        sorted_by_price = dict(sorted(prod_dict.items(), key=lambda x: x[1]["price"]))
+        return render(request, 'monitors.html', {"products": sorted_by_price})
+    
+    if 'sort_by_name' in request.POST:
+        sorted_by_name = dict(sorted(prod_dict.items(), key=lambda x: x[1]["prod_name"]))
+        return render(request, 'monitors.html', {"products": sorted_by_name})
+    
     return render(request, 'monitors.html', {"products": prod_dict})
+
 def controllers(request):
     products = ProductData.objects.filter(category="Controller")
     prod_dict = {}
     for product in products:
-        qr_obj = Inventory.objects.filter(product = product.id)
+        qr_obj = Inventory.objects.filter(product=product.id)
         for object in qr_obj:
             quantity_in_stock = object.quantity_in_stock
-        prod_dict[product.sku] = {"prod_name": product.prod_name, "price": product.price,
-                                          "quantity":quantity_in_stock}
+        prod_dict[product.sku] = {
+            "prod_name": product.prod_name,
+            "price": product.price,
+            "quantity": quantity_in_stock
+        }
+    
+    if 'sort_by_price' in request.POST:
+        sorted_by_price = dict(sorted(prod_dict.items(), key=lambda x: x[1]["price"]))
+        return render(request, 'controllers.html', {"products": sorted_by_price})
+    
+    if 'sort_by_name' in request.POST:
+        sorted_by_name = dict(sorted(prod_dict.items(), key=lambda x: x[1]["prod_name"]))
+        return render(request, 'controllers.html', {"products": sorted_by_name})
+    
     return render(request, 'controllers.html', {"products": prod_dict})
+
 def routers(request):
     products = ProductData.objects.filter(category="Router")
     prod_dict = {}
     for product in products:
-        qr_obj = Inventory.objects.filter(product = product.id)
+        qr_obj = Inventory.objects.filter(product=product.id)
         for object in qr_obj:
             quantity_in_stock = object.quantity_in_stock
-        prod_dict[product.sku] = {"prod_name": product.prod_name, "price": product.price,
-                                          "quantity":quantity_in_stock}
+        prod_dict[product.sku] = {
+            "prod_name": product.prod_name,
+            "price": product.price,
+            "quantity": quantity_in_stock
+        }
+    
+    if 'sort_by_price' in request.POST:
+        sorted_by_price = dict(sorted(prod_dict.items(), key=lambda x: x[1]["price"]))
+        return render(request, 'routers.html', {"products": sorted_by_price})
+    
+    if 'sort_by_name' in request.POST:
+        sorted_by_name = dict(sorted(prod_dict.items(), key=lambda x: x[1]["prod_name"]))
+        return render(request, 'routers.html', {"products": sorted_by_name})
+    
     return render(request, 'routers.html', {"products": prod_dict})
+
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def search(request):
+    if request.method == 'POST':
+        query = request.POST.get('query', '')
+        if query:
+            try:
+                all_products_set = ProductData.objects.all()
+                products = []
+                for item in all_products_set:
+                    temp_prod = []
+                    temp_prod.append(item.category) 
+                    temp_prod.append(item.prod_name)
+                    products.append(temp_prod)
+                
+                filtered_products = []
+                for item in products:
+                    if query in item[1]:  # Assuming the name is at index 1 of the item
+                        filtered_products.append(item[1])
+                    if query in item[0]:
+                        if item[1] not in filtered_products:
+                            filtered_products.append(item[1])
+                result = {}
+                for item in filtered_products:
+                    product_obj = ProductData.objects.filter(prod_name=item)
+                    for prod_item in product_obj:
+                        id = prod_item.id
+                        inventory_obj = Inventory.objects.filter(product= id)
+                        for i in inventory_obj:
+                            quantity = i.quantity_in_stock
+                        result[item] = {"price":prod_item.price, "sku":prod_item.sku, "quantity":quantity,}
+                      
+                context = {'products': result}
+                return render(request, 'search_res.html', context)
+            except Exception as e:
+                print(e)
+                return HttpResponse("Error processing your request.")
+        else:
+            return render(request, 'search_res.html')
+    
+    else:
+        return render(request, 'search_res.html')
 
 @login_required(login_url='login')
 def cart(request):
@@ -130,7 +238,7 @@ def cart(request):
                 if quantity <= 0:
                     OrderItem.objects.filter(product_id = product_id, order_id = None).delete()
                 elif quantity > quantity_in_stock:
-                    additional_message = "We don't how so much"
+                    additional_message = "There is not enough in stock"
                 else:
                     OrderItem.objects.filter(product_id=product_id, order_id=None).update(quantity=quantity)
                 for order_item in OrderItem.objects.filter(order_id=None, customer_id = user ):
@@ -160,6 +268,7 @@ def cart(request):
                     }
                 print(context)
         else:
+            print('asdddddddddddddddddddddddddddd')
             for order_item in OrderItem.objects.filter(order_id=None, customer_id = user ):
                     product_name = order_item.product.prod_name
                     sku = order_item.product.sku
@@ -178,13 +287,12 @@ def cart(request):
                     sku = order_item.product.sku
                     completed_orders[product_name] = {"price":order_item.quantity*order_item.price,"sku":sku,
                                             "quantity":order_item.quantity, "product_id": order_item.product_id}
-                context = {
+            context = {
                 'order_items': items_dict,
                 'total_price': total_price,
                 'placed_orders': placed_orders,
-                'completed_orders': completed_orders
+                'completed_orders': completed_orders,
                 }
-            print(context)
     except Exception as e:
         print(e)
     return render(request, 'Cart.html', context)

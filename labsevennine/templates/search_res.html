@@ -1,13 +1,13 @@
+<!-- search.html -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     {% load static %}
 
-    <title>TechDevShop</title>
-    <meta charset="utf-8">
     <link href='https://fonts.googleapis.com/css?family=Aclonica' rel='stylesheet'>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>Search</title>
     <style>
         * {
             box-sizing: border-box;
@@ -143,11 +143,6 @@
             }
         }
 
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
 
         .container {
             font-family: "Aclonica", sans-serif;
@@ -161,15 +156,14 @@
             align-items: center;
         }
 
-        .sform {
+        #sform {
             display: block;
             margin-right: auto;
         }
 
-        #query {
-            flex-basis: 100%;
+        .query {
             width: auto;
-            margin-left: auto;
+            margin: auto;
             font-family: "Aclonica", sans-serif;
             padding: 5px 10px;
             border: 3px solid #747474;
@@ -178,6 +172,34 @@
             text-align: center;
             border-radius: 5px;
         }
+
+        .bigsearch2 {
+            display: block;
+            width: 98%;
+            margin: 10px;
+            font-family: "Aclonica", sans-serif;
+            padding: 5px 10px;
+            border: 3px solid #747474;
+            background-color: #ffffff;
+            color: rgb(0, 0, 0);
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        #search_button2 {
+            display: block;
+            width: 98%;
+            font-family: "Aclonica", sans-serif;
+            padding: 5px 10px;
+            margin: 10px;
+            text-align: center;
+            border: 3px solid #747474;
+            background-color: #000000;
+            color: rgb(255, 255, 255);
+            text-align: center;
+            border-radius: 5px;
+        }
+
 
         #search_button {
             flex-basis: 100%;
@@ -190,6 +212,16 @@
             color: rgb(255, 255, 255);
             text-align: center;
             border-radius: 5px;
+        }
+
+        h1 {
+            font-family: "Aclonica", sans-serif;
+            text-align: center;
+            color: #f2f2f2;
+            font-size: 24px;
+            box-shadow: 0px 0px 20px rgba(255, 0, 0, 1);
+            text-shadow: 2px 2px 4px #000000;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -209,35 +241,35 @@
         <a href="{% url 'logout' %}">Logout</a>
         <form method="post" action="{% url 'search_res' %}" id='sform'>
             {% csrf_token %}
-            <input type="text" id="query" name="query">
+            <input type="text" class="query" name="query">
             <input type="submit" value="Search" id="search_button">
         </form>
     </div>
-    <form method="POST" action="{% url 'controllers' %}">
+    <h1>Tech Devices Shop - Search</h1>
+    <form method="post" action="{% url 'search_res' %}">
         {% csrf_token %}
-        <button type="submit" class="button" name="sort_by_price">Sort[Price]</button>
+        <input type="text" name="query" class="bigsearch2">
+        <input type="submit" value="Search" id="search_button2">
     </form>
-    <form method="POST" action="{% url 'controllers' %}">
-        {% csrf_token %}
-        <button type="submit" class="button" name="sort_by_name">Sort[Name]</button>
-    </form>
+    {% if products %}
+
     <div class="row">
-        {% for sku, product in products.items %}
+        {% for prod_name, item in products.items %}
         <ul class="container">
             <div class="column">
-                <nav class="prodname">{{ product.prod_name }}</nav>
-                <img src="{% static 'images/' %}{{sku}}.jpg">
-                <nav class="price">{{ product.price }}$</nav>
-                {% if product.quantity > 0 %}
-                <nav class="quantity">Quantity: {{ product.quantity }}</nav>
+                <nav class="prodname">{{ prod_name }}</nav>
+                <img src="{% static 'images/' %}{{item.sku}}.jpg">
+                <nav class="price">{{ item.price }}$</nav>
+                {% if item.quantity > 0 %}
+                <nav class="quantity">Quantity: {{ item.quantity }}</nav>
                 <form method="post" action="{% url 'ordering' %}">
                     {% csrf_token %}
-                    <input type="hidden" name="sku" value="{{ sku }}">
+                    <input type="hidden" name="sku" value="{{ item.sku }}">
                     <button type="submit" class="button">Buy</button>
                 </form>
                 <form method="post" action="{% url 'info' %}">
                     {% csrf_token %}
-                    <input type="hidden" name="sku" value="{{ sku }}">
+                    <input type="hidden" name="sku" value="{{ item.sku }}">
                     <button type="submit" class="button">Info</button>
                 </form>
                 {% else %}
@@ -247,11 +279,11 @@
         </ul>
         {% endfor %}
     </div>
+    {% endif %}
     {% else %}
     <a href="{% url 'login' %}" class='auth_button'>Login</a>
     <a href="{% url 'register' %}" class='auth_button'>Registration</a>
     {% endif %}
 </body>
-
 
 </html>
